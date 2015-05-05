@@ -6,10 +6,13 @@ public class Player : MonoBehaviour
 {
 	// Used to show debug information.
 	public Text debugText;
-
 	public Text deathText;
 
 	public float speed;
+	public float maxSpeed;
+	public float jumpHeight;
+
+	bool isFalling = false;
 
 	// Self-reference to the player's rigidbody component.
 	private Rigidbody2D rb;
@@ -30,22 +33,27 @@ public class Player : MonoBehaviour
 		// This is a hack that prevents the player from ever rotating because I couldn't find a more elegant solution.
 		this.transform.rotation = new Quaternion (0, 0, 0, 0);
 
-		// Input received from the player is stored in these two floats.
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Mathf.Clamp (Input.GetAxis ("Vertical"), 0, 0.5f);
-
 		//Debug information.
-		debugText.text = "X: " + moveHorizontal + "\nY: " + moveVertical;
+		debugText.text = "X: " + rb.velocity.x + "\nY: " + rb.velocity.y;
 
 		if (alive) 
 		{
 			// This is what causes the player to move. However the code is bad and should be changed to the 
 			// commented out segment below if you can figure out why the fuck it's not working.
-			this.transform.position += new Vector3 (moveHorizontal, 2 * moveVertical, 0) * speed;
+			//this.transform.position += new Vector3 (moveHorizontal, 2 * moveVertical, 0) * speed;
 
-			//Vector2 movement = new Vector2 (moveHorizontall, moveVertical);
+			//Vector2 movement = new Vector2 (moveHorizontal * speed, moveVertical * 10);
 		
-			//rb.AddForce (movement);
+			if (Input.GetKey(KeyCode.LeftArrow) && rb.velocity.x >= -maxSpeed)
+			    rb.velocity += new Vector2(-0.15f, 0);
+
+			if (Input.GetKey(KeyCode.RightArrow) && rb.velocity.x <= maxSpeed)
+			    rb.velocity += new Vector2(0.15f, 0);
+
+			if (Input.GetButtonDown ("Jump") && isFalling == false)
+			{
+				Jump();
+			}
 		}
 
 		if (this.transform.position.y < -10) 
@@ -54,4 +62,15 @@ public class Player : MonoBehaviour
 			deathText.text = "YOU DIED LIKE A BITCH";
 		}
 	}
+
+	void Jump()
+	{
+		rb.velocity += new Vector2 (0, jumpHeight);
+	}
+
+	void OnCollisionStay()
+	{
+		isFalling = false;
+	}
+
 }
