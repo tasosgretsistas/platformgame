@@ -4,10 +4,6 @@ using System.Collections;
 
 public class Player : MonoBehaviour 
 {
-	// Used to show debug information.
-	public Text debugText;
-	public Text deathText;
-
 	public float speed;
 	public float maxSpeed;
 	public float jumpHeight;
@@ -17,14 +13,13 @@ public class Player : MonoBehaviour
 	// Self-reference to the player's rigidbody component.
 	private Rigidbody2D rb;
 
-	private bool alive;
+	public bool alive;
 	
 	// Use this for initialization
 	void Start () 
 	{
 		rb = GetComponent<Rigidbody2D> ();
 		alive = true;
-		deathText.text = "";
 	}
 	
 	// Update is called once per frame
@@ -33,8 +28,6 @@ public class Player : MonoBehaviour
 		// This is a hack that prevents the player from ever rotating because I couldn't find a more elegant solution.
 		this.transform.rotation = new Quaternion (0, 0, 0, 0);
 
-		//Debug information.
-		debugText.text = "X: " + rb.velocity.x + "\nY: " + rb.velocity.y;
 
 		if (alive) 
 		{
@@ -59,7 +52,6 @@ public class Player : MonoBehaviour
 		if (this.transform.position.y < -10) 
 		{
 			alive = false;
-			deathText.text = "YOU DIED LIKE A BITCH";
 		}
 	}
 
