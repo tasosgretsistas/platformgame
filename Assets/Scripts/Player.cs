@@ -25,8 +25,6 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		// This is a hack that prevents the player from ever rotating because I couldn't find a more elegant solution.
-		this.transform.rotation = new Quaternion (0, 0, 0, 0);
 
 		//Hax
 		this.rb.velocity = new Vector2(this.rb.velocity.x, Mathf.Clamp (this.rb.velocity.y, -14, 7));
