@@ -8,7 +8,8 @@ public class GameCamera : MonoBehaviour
 	public float xOffset = 2;
 	public float yOffset = 2;
 
-	public float cameraStopFollowingPoint = -4.5f;
+    public float topStopFollowingPoint = 4.5f;
+	public float bottomStopFollowingPoint = -4.5f;
 
 	//The constant distance between the camera and the player
 	private Vector3 offset;
@@ -27,8 +28,8 @@ public class GameCamera : MonoBehaviour
 		//This if check is here to prevent the camera from following the player to the depths of hell
 		 if (player.alive)
 		{
-			transform.position = new Vector3(player.transform.position.x + offset.x, 
-		                                 Mathf.Clamp ((player.transform.position.y + offset.y), cameraStopFollowingPoint, 15),
+			transform.position = new Vector3(Mathf.Clamp((player.transform.position.x + offset.x), 8.9f, 1080),
+                                             Mathf.Clamp((player.transform.position.y + offset.y), bottomStopFollowingPoint, topStopFollowingPoint),
 		                                 	 player.transform.position.z + offset.z);
 		}
 	}

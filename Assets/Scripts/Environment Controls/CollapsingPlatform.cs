@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CollapsingPlatform : MonoBehaviour {
-
-	public GameObject player;
-
-	private Rigidbody2D rb;
-
+public class CollapsingPlatform : MonoBehaviour 
+{
 	public float collapseDelay = 1;
+
+    private Rigidbody2D rb;
 
 	void Start()
 	{

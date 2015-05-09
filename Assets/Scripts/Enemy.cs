@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
 	// Returns the distance to the player in the form of a float in absolute value form.
 	float DistanceToPlayer(GameObject player)
 	{
-		return Mathf.Abs(this.transform.position.x - player.transform.position.x);
+		return (Mathf.Abs(this.transform.position.x - player.transform.position.x)) + (Mathf.Abs(this.transform.position.y - player.transform.position.y)) ;
 	}
 
 	// Makes the NPC move towards the player.
