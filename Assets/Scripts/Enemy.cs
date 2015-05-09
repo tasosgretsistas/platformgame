@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
 	private int fleeThreshold = 5;
 
 	// The distance at which the NPC can perceive the player.
-	private float aggroRange = 10.0f;
+	public float aggroRange = 10.0f;
 
 	// Update is called once per frame
 	void Update () 

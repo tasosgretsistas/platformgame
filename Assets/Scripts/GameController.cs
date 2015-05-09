@@ -4,8 +4,9 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
 	public Player player;
+	public GameCamera gameCamera;
 
-	public Vector3 spawnPoint;
+	public Transform spawnPoint;
 	 
 	public float respawnDelay;
 	private float respawnTimer;
@@ -15,7 +16,7 @@ public class GameController : MonoBehaviour {
 	void Start () 
 	{
 		//The player spawns at the start of the game.
-		player.transform.position = spawnPoint;
+		player.transform.position = spawnPoint.position;
 
 		//If the developer forgot to set the delay timer, it is set to a default value for him.
 		if (respawnDelay == 0)
@@ -44,6 +45,7 @@ public class GameController : MonoBehaviour {
 	{
 		respawnTimer = 0;
 		player.alive = true;
-		player.transform.position = spawnPoint;
+		player.transform.position = spawnPoint.position;
+		gameCamera.ResetCamera();
 	}
 }
