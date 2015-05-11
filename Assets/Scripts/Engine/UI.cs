@@ -8,13 +8,20 @@ public class UI : MonoBehaviour {
 	private Rigidbody2D playerRigidbody;
 
 	public Text debugText;
+    public Text statusText;
 	public Text deathText;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
 		playerRigidbody = player.GetComponent<Rigidbody2D>();
+
 		deathText.text = "";
+
+        statusText.text = "Lives: " + player.lives +
+                          "\nHealth: " + player.currentHealth + "/" + player.maxHealth;
+
+        statusText.text = DisplayPlayerHealth();
 	}
 	
 	// Update is called once per frame
@@ -22,16 +29,27 @@ public class UI : MonoBehaviour {
 	{
 		debugText.text = DisplayPlayerVelocity ();
 
-		if (player.alive) {
+        statusText.text = DisplayPlayerHealth();
+
+		if (player.alive) 
+        {
 			deathText.text = "";
-		} else {
+		} 
+
+        else 
+        {
 			deathText.text = "YOU DIED LIKE A BITCH";
 		}
 	}
 
+    string DisplayPlayerHealth()
+    {
+        return "Health: " + player.currentHealth + "/" + player.maxHealth +
+             "\nLives: " + player.lives;
+    }
+
 	string DisplayPlayerVelocity()
 	{
-
 		return "X: " + playerRigidbody.velocity.x +
 			 "\nY: " + playerRigidbody.velocity.y;
 	}	

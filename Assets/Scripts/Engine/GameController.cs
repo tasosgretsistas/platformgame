@@ -1,26 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameController : MonoBehaviour {
-
+public class GameController : MonoBehaviour 
+{
 	public Player player;
-	public GameCamera gameCamera;
 
 	public Transform spawnPoint;
-	 
-	public float respawnDelay;
-	private float respawnTimer;
-	private float defaultRespawnDelay = 3;
+    private Transform respawnPoint;
+
+    public float respawnDelay = 3f;
+    private float respawnTimer = 0f;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
 		//The player spawns at the start of the game.
 		player.transform.position = spawnPoint.position;
-
-		//If the developer forgot to set the delay timer, it is set to a default value for him.
-		if (respawnDelay == 0)
-			respawnDelay = defaultRespawnDelay;
+        respawnPoint = spawnPoint;
 	}
 	
 	// Update is called once per frame
@@ -34,7 +30,7 @@ public class GameController : MonoBehaviour {
 
 		if (respawnTimer >= respawnDelay) 
 		{
-			RespawnPlayer ();
+			RespawnPlayer();
 		}
 	}
 
@@ -45,7 +41,7 @@ public class GameController : MonoBehaviour {
 	{
 		respawnTimer = 0;
 		player.alive = true;
-		player.transform.position = spawnPoint.position;
-		gameCamera.ResetCamera();
+        player.currentHealth = player.maxHealth;
+        player.transform.position = respawnPoint.position;
 	}
 }
