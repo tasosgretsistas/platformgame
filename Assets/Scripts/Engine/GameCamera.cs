@@ -3,36 +3,27 @@ using System.Collections;
 
 public class GameCamera : MonoBehaviour 
 {
-	public Player player;
+    // The hero object that the camera will follow.
+	public Hero hero;
 
+    // The distance from the hero that the camera will center at.
 	public float xOffset = 1.5f;
 	public float yOffset = 1.5f;
 
+    // The points at which the camera will stop following the hero off the screen.
     public float topStopFollowingPoint = 15f;
 	public float bottomStopFollowingPoint = 5f;
     public float leftStopFollowingPoint = 8.9f;
     public float rightStopFollowingPoint = 1080f;
 
-	//The constant distance between the camera and the player
-	private Vector3 offset;
-
-	// Use this for initialization
-	void Awake() 
-	{
-		this.transform.position = new Vector3(player.transform.position.x + xOffset, player.transform.position.y + yOffset, this.transform.position.z);
-
-		offset = transform.position - player.transform.position;
-	}
-
-	// Update is called once per frame
 	void LateUpdate() 
 	{
-		//This if check is here to prevent the camera from following the player to the depths of hell
-		 if (player.alive)
+         // If the hero is alive...
+		 if (hero.alive)
 		{
-			transform.position = new Vector3(Mathf.Clamp((player.transform.position.x + offset.x), leftStopFollowingPoint, rightStopFollowingPoint),
-                                             Mathf.Clamp((player.transform.position.y + offset.y), bottomStopFollowingPoint, topStopFollowingPoint),
-		                                 	 player.transform.position.z + offset.z);
-		}
+            // ... the camera's position becomes that of the hero's plus the specified offsets.
+            transform.position = new Vector3(Mathf.Clamp((hero.transform.position.x + xOffset), leftStopFollowingPoint, rightStopFollowingPoint),
+                                             Mathf.Clamp((hero.transform.position.y + yOffset), bottomStopFollowingPoint, topStopFollowingPoint),
+		                                 	 transform.position.z);		}
 	}
 }

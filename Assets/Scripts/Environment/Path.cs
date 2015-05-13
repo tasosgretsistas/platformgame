@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class Path : MonoBehaviour {
 
+    // The array of points that the path consists of. This has to be at least 1.
 	public Transform[] Points;
 	
 	public IEnumerator<Transform> GetPathEnumerator()

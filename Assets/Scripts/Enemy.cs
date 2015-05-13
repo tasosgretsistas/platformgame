@@ -4,71 +4,85 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour 
 {
-	// The player's object.
-	public Player player;
+    // The hero object that this enemy tracks.
+	public Hero hero;
+    
+    [HideInInspector]
+    public bool facingRight = false; // Determines if the enemy is facing right.
 
-    protected bool facingRight = false;
+    public int health = 1; // The enemy's current health points.
+    public int maxHealth = 1; // The enemy's maximum health points.
+    public float speed = 0.02f;  // The enemy's speed for moving with the default move methods.
 
-    protected Rigidbody2D rb;
-
-    public int health = 1;
-    public float speed = 0.02f;
-
-    // The distance at which the NPC can perceive the player.
+    // The distance at which the enemy can perceive the hero.
     public float aggroRange = 5f;
 
-	// The health at which the NPC will choose to run away instead of chase the player.
+    // The health at which the enemy will choose to run away instead of chase the hero.
     public int fleeThreshold = 0;
+    
+    // Self-reference to the enemy's Rigidbody2D component.
+    protected Rigidbody2D rb;
 
     public virtual void Awake()
     {
         rb = this.GetComponent<Rigidbody2D>();
     }
 
-	// Update is called once per frame
+    /// <summary>
+    /// This is the default FixedUpdate function for the base Enemy class. 
+    /// By default, it just moves the enemy towards or away from the hero, depending on the enemy's health.
+    /// It should be overriden by every specific enemy to be provide custom behaviour.
+    /// </summary>
     public virtual void FixedUpdate() 
 	{
-		if (DistanceToPlayer(player.transform) <= aggroRange)
+        // If the hero is within the enemy's aggro range...
+		if (DistanceToHero(hero.transform) <= aggroRange)
         {
-            // If the player is within aggro range and this enemy is healthy, it pursues the player.
+            // If this enemy is healthy...
             if (this.health >= this.fleeThreshold)
+                // ... it pursues the hero.
                 this.MoveTowardsPlayer();
+
             // Otherwise it runs away.
             else
                 this.MoveAwayFromPlayer();
         }
 	}
 
-	// Returns the distance to the player in the form of a float in absolute value form.
-	public virtual float DistanceToPlayer(Transform playerPosition)
+    /// <summary>
+    /// Returns the distance to a hero in the form of a float in absolute value form.
+    /// </summary>
+    /// <param name="heroPosition">The hero's position - should be the hero's transform.position</param>
+    /// <returns></returns>
+	public virtual float DistanceToHero(Transform heroPosition)
 	{
-		return (Mathf.Abs(this.transform.position.x - this.player.transform.position.x)) + (Mathf.Abs(this.transform.position.y - this.player.transform.position.y)) ;
+		return (Mathf.Abs(this.transform.position.x - hero.transform.position.x)) + (Mathf.Abs(this.transform.position.y - hero.transform.position.y)) ;
 	}
 
-	// Makes the enemy move towards the player.
+	/// <summary>
+    /// Makes the enemy move towards the hero by modifying its position directly.
+    /// This is only for testing purposes and each enemy should have its individual movememt method.
+	/// </summary>
     public virtual void MoveTowardsPlayer()
-	{
-		if (this.transform.position.x > this.player.transform.position.x)
-			this.transform.position -= new Vector3 (speed, 0, 0);
-		else if (this.transform.position.x < player.transform.position.x)
-			this.transform.position += new Vector3 (speed, 0, 0);
-	}
+    {
+        this.transform.position += new Vector3(Mathf.Sign(hero.transform.position.x - this.transform.position.x) * speed, 0, 0);
+    }
 
-    // Makes the enemy move away from the player.
+    /// <summary>
+    /// Makes the enemy move away from the hero by modifying its position directly.
+    /// This is only for testing purposes and each enemy should have its individual movememt method.
+    /// </summary>
     public virtual void MoveAwayFromPlayer()
 	{
-		if (this.transform.position.x > this.player.transform.position.x)
-			this.transform.position += new Vector3 (speed, 0, 0);
-		else if (this.transform.position.x < this.player.transform.position.x)
-			this.transform.position -= new Vector3 (speed, 0, 0);
+        this.transform.position -= new Vector3(Mathf.Sign(hero.transform.position.x - this.transform.position.x) * speed, 0, 0);
 	}
 
     public void Flip()
     {
-        // Switch the way the player is labelled as facing
+        // Switch the way the enemy is labelled as facing
         facingRight = !facingRight;
 
-        // Multiply the player's x local scale by -1
+        // Multiply the enemy's x local scale by -1
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;

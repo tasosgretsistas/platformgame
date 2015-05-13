@@ -4,16 +4,17 @@ using System.Collections.Generic;
 
 public class MovingPlatform : MonoBehaviour 
 {
+    // The movement types that the platform can use.
 	public enum FollowType
 	{
 		MoveTowards,
 		Lerp
 	}
 
-	public FollowType Type = FollowType.MoveTowards;
-	public Path Path;
-	public float Speed = 1;
-	public float MaxDistanceToGoal = 0.1f;
+    public FollowType Type = FollowType.MoveTowards; // Determines which movement type the platform will use.
+	public Path Path;                                // The path that the platform will follow.
+	public float Speed = 1;                          // The speed that the platform moves at.
+	public float MaxDistanceToGoal = 0.1f;           // The maximum distance to the next point offset before the platform starts moving to the next point in the path.
 
 	private IEnumerator<Transform> currentPoint;
 

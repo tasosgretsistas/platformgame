@@ -3,45 +3,60 @@ using System.Collections;
 
 public class GameController : MonoBehaviour 
 {
-	public Player player;
+    // The game's main hero object.
+	public Hero hero;
 
-	public Transform spawnPoint;
-    private Transform respawnPoint;
+	public Transform spawnPoint;        // The original spawn point.
+    private Transform respawnPoint;     // The point at which the hero respawns after death.
 
-    public float respawnDelay = 3f;
-    private float respawnTimer = 0f;
+    public float respawnDelay = 3f;     // The amount of time before the hero respawns.
+    private float respawnTimer = 0f;    // The time left until the hero respawns when dead.
 
-	// Use this for initialization
 	void Awake () 
 	{
-		//The player spawns at the start of the game.
-		player.transform.position = spawnPoint.position;
+        // The hero's position becomes that of his original spawn position.
+		hero.transform.position = spawnPoint.position;
+
+        // At the start of the game, the respawn point is the hero's original spawn point.
         respawnPoint = spawnPoint;
 	}
 	
 	// Update is called once per frame
-	void Update () 
-	{
-		//If the player is dead, the respawn timer begins to tick for the respawn routine to take place.
-		if (!player.alive) 
-		{
-			respawnTimer += Time.deltaTime;
-		}
+    void Update()
+    {
+        // If the hero is dead...
+        if (!hero.alive)
+            // ... the respawn timer starts counting.
+            respawnTimer += Time.deltaTime;
 
-		if (respawnTimer >= respawnDelay) 
-		{
-			RespawnPlayer();
-		}
-	}
+        // If the respawn timer is larger than the respawn delay...
+        if (respawnTimer >= respawnDelay)
+            // The respawn routine takes place.
+            RespawnPlayer();
+    }
 
 	/// <summary>
-	/// Respawns the player.
+	/// Respawns the player and resets the player when applicable.
 	/// </summary>
 	void RespawnPlayer()
 	{
+        // First, the respawn timer is set to 0.
 		respawnTimer = 0;
-		player.alive = true;
-        player.currentHealth = player.maxHealth;
-        player.transform.position = respawnPoint.position;
+
+        // Then, if the hero has at least 1 life left...
+        if (Hero.lives >= 1)
+        {
+            // ... he respawns and the level resets.
+            hero.alive = true;
+            Hero.lives--;
+            Application.LoadLevel("Main");
+        }
+
+        else
+        {
+            // Otherwise, the game is over.
+
+            // Insert game over code here.
+        }
 	}
 }
